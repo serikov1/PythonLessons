@@ -1,0 +1,39 @@
+{% extends 'crud/layout.html' %}
+
+{% block content %}
+    {# настройка визуализации#}
+    <div style="margin-top: 50px;" class="ui container">
+    <h1 class="ui center aligned header">My todo list</h1>
+    <h3 class="test_style">Manage yours time!</h3>
+    {# форма для добавления задачи#}
+    <form class="ui form" action="{% url 'add' %}" method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label>New task</label>
+            <label>
+                <input type="text" name="title" placeholder="Input yours task">
+            </label><br>
+        </div>
+        <button class="ui teal basic button" type="submit">Add</button>
+    </form>
+
+    {#в цикле перебираем задачи из todolist#}
+    {% for task in todolist %}
+    <div class="ui segment">
+        {# выодим id и title каждого task#}
+        <p class="ui big header">№{{ task.id }} {{ task.title }}</p>
+
+        {# проверям выполнено ли task#}
+        {% if task.taskcomplete == False %}
+        <span class="ui gray label">Not complete</span>
+        {# при нажатии кнопки close вызываем функцию обработки update#}
+        <a class="ui primary basic button" href="{% url 'update' todoid=task.id %}">Close</a>
+        {% else %}
+        <span class="ui green label">Complete</span>
+        <a class="ui blue button" href="{% url 'update' todoid=task.id %}">Open</a>
+        {% endif %}
+        <a class="ui negative basic button" href="{% url 'delete' todoid=task.id %}">Delete</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
