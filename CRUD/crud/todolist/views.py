@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import TODO
-from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 
@@ -10,7 +9,6 @@ def index(request):
     return render(request, 'crud/index.html', {'todolist': cases, 'Title': 'Main page'})
 
 
-@require_http_methods(['POST'])
 def add(request):
     # прием запроса из формы
     title = request.POST['title']

@@ -10,6 +10,3 @@ class TODO(models.Model):
     class Meta:
         verbose_name = 'Case'
         verbose_name_plural = 'Cases'
-
-    def __str__(self):
-        return self.title
