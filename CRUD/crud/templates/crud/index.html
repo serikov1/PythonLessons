@@ -1,39 +1,77 @@
 {% extends 'crud/layout.html' %}
 
 {% block content %}
+<div class="wrapper">
     {# настройка визуализации #}
-    <div style="margin-top: 50px;" class="ui container">
-    <h1 class="ui center aligned header">My todo list</h1>
-    <h3 class="test_style">Make your day productive!</h3>
+<div id="container" class="ui container">
+    <h1 id="main" >My todo list</h1>
+    <p id="position_btheme">
+        <button type="button" class="ui blue basic button" id="change_theme">Сменить тему</button>
+    </p>
+    <h3 id="text">Make your day productive!</h3>
     {# форма для добавления задачи #}
-    <form class="ui form" action="{% url 'add' %}" method="post">
+    <form class="ui form" action="{% url 'add' %}" method='POST'>
         {% csrf_token %}
         <div class="field">
-            <label>New task</label>
+            <label id="text">New task</label>
             <label>
                 <input type="text" name="title" placeholder="Input yours task">
             </label>
         </div>
-        <button class="ui green basic button" type="submit">Add</button>
+        <button class="ui green button" type="submit">Add</button>
     </form>
 
     {#в цикле перебираем задачи из todolist #}
-    {% for task in todolist %}
-    <div class="ui segment">
+    {% for task  in todolist %}
+    <div class="ui segment part">
+
         {# выодим id и title каждого task #}
         <p class="ui big header">№ {{ task.id }} {{ task.title }}</p>
 
         {# проверям выполнено ли task #}
-        {% if task.taskcomplete == False %}
+        <table>
+        <tr>
+        <td>
+            {% if task.taskcomplete == False %}
         <span class="ui gray label">Not complete</span>
+        </td>
         {# при нажатии кнопки close вызываем функцию обработки update #}
-        <a class="ui primary basic button" href="{% url 'update' todoid=task.id %}">Close</a>
+        <td>
+        <form class="ui form" action="{% url 'update' todoid=task.id %}" method="post">
+            {% csrf_token %}
+            <button class="ui primary basic button" type="submit">Close</button>
+        </form>
+        </td>
         {% else %}
+        <td>
         <span class="ui green label">Complete</span>
-        <a class="ui yellow basic button" href="{% url 'update' todoid=task.id %}">Open</a>
+        </td>
+        <td>
+        <form class="ui form" action="{% url 'update' todoid=task.id %}" method="post">
+            {% csrf_token %}
+            <button class="ui yellow basic button" type="submit">Open</button>
+        </form>
+        </td>
         {% endif %}
-        <a class="ui negative basic button" href="{% url 'delete' todoid=task.id %}">Delete</a>
+        <td>
+        <form class="ui form" action="{% url 'delete' todoid=task.id %}" method="post">
+            {% csrf_token %}
+            <button class="ui negative basic button" type="submit"
+            onclick="return confirm('Are you really want to delete??')">Delete</button>
+        </form>
+        </td>
+        </tr>
+        </table>
+
     </div>
     {% endfor %}
+</div>
+<footer>
+<a href="https://t.me/idvasup" id="socialmedia">
+    <img src="https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram&logoColor=white" alt="LinkedIn Badge"/>
+</a>
+<p>©2022 by Serikov Vasiliy</p>
+</footer>
+
 </div>
 {% endblock content %}
